@@ -78,6 +78,10 @@ label.chk input{width:20px;height:20px;accent-color:var(--amb)}
     <div class="sl"><div><span>Fifanoherana (contraste)</span><b id="vco">0</b></div><input type="range" id="co" min="-100" max="100" value="0"></div>
     <div class="sl"><div><span>Herin’ny loko (saturation)</span><b id="vsa">0</b></div><input type="range" id="sa" min="-100" max="100" value="0"></div>
     <div class="sl"><div><span>Hafanana (température)</span><b id="vte">0</b></div><input type="range" id="te" min="-60" max="60" value="0"></div>
+    <div class="sl"><div><span>Netteté (fanamafisana)</span><b id="vsh">0</b></div><input type="range" id="sh" min="0" max="100" value="0"></div>
+    <div class="sl"><div><span>Fanalana grain / bruit</span><b id="vdn">0</b></div><input type="range" id="dn" min="0" max="100" value="0"></div>
+    <div class="sl"><div><span>Fanalana vovoka sy kapoka</span><b id="vdv">0</b></div><input type="range" id="dv" min="0" max="100" value="0"></div>
+    <p class="guide" style="list-style:none;padding:0;margin:4px 0 8px">Ampiasao tsikelikely: raha be loatra ny fanalana vovoka dia mety ho very ny antsipiriany madinika.</p>
     <div class="sl"><div><span>Hanapaka sisiny (rognage)</span><b id="vcr">0%</b></div><input type="range" id="cr" min="0" max="20" value="0"></div>
     <button id="rst" style="margin-top:6px;width:100%">Averina ny fanitsiana</button>
   </div>
@@ -112,7 +116,7 @@ label.chk input{width:20px;height:20px;accent-color:var(--amb)}
 (function(){
 var $=function(i){return document.getElementById(i)};
 var img=null,pending=false,blobUrl=null;
-var ids=['br','co','sa','te','cr'];
+var ids=['br','co','sa','te','cr','sh','dn','dv'];
 
 function load(f){
   if(!f)return;
@@ -131,6 +135,26 @@ function draw(max){
   cv.width=Math.max(1,Math.round(sw*s));cv.height=Math.max(1,Math.round(sh*s));
   cv.getContext('2d',{willReadFrequently:true}).drawImage(img,sx,sy,sw,sh,0,0,cv.width,cv.height);
   return cv;
+}
+function box(s,w,h,r){var t=new Float32Array(w*h),o=new Float32Array(w*h),c=2*r+1,x,y,a,b,m,q;
+  for(y=0;y<h;y++){m=y*w;a=0;for(x=-r;x<=r;x++)a+=s[m+Math.min(w-1,Math.max(0,x))];
+    for(x=0;x<w;x++){t[m+x]=a/c;a+=s[m+Math.min(w-1,x+r+1)]-s[m+Math.max(0,x-r)]}}
+  for(x=0;x<w;x++){a=0;for(y=-r;y<=r;y++)a+=t[Math.min(h-1,Math.max(0,y))*w+x];
+    for(y=0;y<h;y++){o[y*w+x]=a/c;a+=t[Math.min(h-1,y+r+1)*w+x]-t[Math.max(0,y-r)*w+x]}}
+  return o}
+function enhance(d,w,h){
+  var sh=+$('sh').value,dn=+$('dn').value,dv=+$('dv').value;
+  if(!sh&&!dn&&!dv)return;
+  var N=w*h,L=new Float32Array(N),C,p,i,bl,df,T,wt,big=Math.max(w,h);
+  for(p=0,i=0;p<N;p++,i+=4)L[p]=.299*d[i]+.587*d[i+1]+.114*d[i+2];
+  C=new Float32Array(L);
+  if(dv){T=90-.7*dv;bl=box(C,w,h,Math.max(2,Math.round(big/200)));
+    for(p=0;p<N;p++){df=C[p]-bl[p];wt=(Math.abs(df)-T/2)/(T/2);wt=wt<0?0:wt>1?1:wt;C[p]-=wt*df}}
+  if(dn){bl=box(C,w,h,Math.max(1,Math.round(big/900)));var a=dn/100*.8;
+    for(p=0;p<N;p++)C[p]+=a*(bl[p]-C[p])}
+  if(sh){bl=box(C,w,h,Math.max(1,Math.round(big/700)));var g=sh/100*1.5;
+    for(p=0;p<N;p++)C[p]+=g*(C[p]-bl[p])}
+  for(p=0,i=0;p<N;p++,i+=4){df=C[p]-L[p];d[i]+=df;d[i+1]+=df;d[i+2]+=df}
 }
 function process(cv){
   var x=cv.getContext('2d'),id=x.getImageData(0,0,cv.width,cv.height),d=id.data,n=d.length,i,k;
@@ -157,6 +181,7 @@ function process(cv){
     if(bw){r=g=b=l}else{r=l+(r-l)*sa;g=l+(g-l)*sa;b=l+(b-l)*sa}
     d[i]=r;d[i+1]=g;d[i+2]=b;
   }
+  enhance(d,cv.width,cv.height);
   x.putImageData(id,0,0);
 }
 function render(){
@@ -184,7 +209,7 @@ $('fGal').addEventListener('change',function(e){load(e.target.files[0]);e.target
 
 function save(type,ext){
   if(!img){alert('Alao sary aloha / Choisissez d’abord une photo.');return}
-  var cv=draw(4000);process(cv);
+  var cv=draw(3000);process(cv);
   cv.toBlob(function(b){
     if(!b)return;
     if(blobUrl)URL.revokeObjectURL(blobUrl);
