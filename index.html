@@ -1,235 +1,1763 @@
 <!DOCTYPE html>
-<html lang="mg">
+<html lang="mg" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f141c">
-<title>SaryVelona</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0f141c;--card:#171c24;--line:#2a3140;--tx:#eef1f6;--mut:#9aa4b5;--amb:#f59e0b;--cy:#22d3ee;--on-amb:#1a1200;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f1ea;--card:#fff;--line:#d9d4c7;--tx:#1c1a16;--mut:#6b665a;--amb:#b45f06;--cy:#0e7490;--on-amb:#fff;color-scheme:light}}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif}
-main{max-width:480px;margin:0 auto;padding:14px 14px 40px}
-h1{font-size:22px;margin:0;letter-spacing:-.01em}
-.sub{color:var(--mut);font-size:13px;margin:2px 0 14px}
-.row{display:flex;gap:8px}
-button,.btn{font:inherit;border:0;border-radius:12px;padding:12px 14px;cursor:pointer;background:var(--card);color:var(--tx);border:1px solid var(--line);flex:1;text-align:center}
-.pri{background:var(--amb);color:var(--on-amb);border-color:var(--amb);font-weight:700}
-button:focus-visible,input:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
-.stage{position:relative;margin:14px 0 6px;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line);min-height:220px;display:flex;align-items:center;justify-content:center}
-.stage canvas{display:block;width:100%;height:auto}
-#org{position:absolute;inset:0;height:100%;object-fit:contain}
-.empty{color:var(--mut);padding:44px 20px;text-align:center;font-size:14px}
-.tag{position:absolute;top:8px;font-size:11px;background:#000a;color:#fff;padding:3px 8px;border-radius:8px}
-.cmp{width:100%;accent-color:var(--cy);margin:0 0 6px}
-.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px}
-.box h2{font-size:14px;margin:0 0 8px;color:var(--amb)}
-label.chk{display:flex;align-items:center;gap:10px;padding:7px 0}
-label.chk input{width:20px;height:20px;accent-color:var(--amb)}
-.sl{margin:8px 0}
-.sl div{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
-.sl b{color:var(--amb);font-weight:500}
-.sl input{width:100%;accent-color:var(--amb)}
-.guide{font-size:13px;color:var(--mut);margin:0;padding-left:18px}
-#ov{position:fixed;inset:0;background:#000e;display:none;flex-direction:column;align-items:center;gap:10px;padding:max(16px,env(safe-area-inset-top,0px)) 16px 16px;z-index:9;overflow:auto}
-#ov.on{display:flex}
-#ov img{max-width:100%;border-radius:8px}
-#ov p{color:#fff;margin:0;text-align:center;font-size:14px}
-#ov button{flex:none;width:100%;max-width:320px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Labo Sary Négatif AI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        darkroom: {
+                            950: '#09090b',
+                            900: '#121215',
+                            850: '#18181c',
+                            800: '#202026',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #09090b;
+            color: #f4f4f5;
+        }
+
+        /* Hide scrollbars on horizontal pill strips while keeping smooth touch scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Touch-friendly tall thumb sliders for mobile fingers */
+        input[type="range"].labo-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 32px;
+            background: transparent;
+            cursor: pointer;
+            touch-action: pan-y;
+        }
+        input[type="range"].labo-slider::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #27272a;
+            border: 1px solid #3f3f46;
+        }
+        input[type="range"].labo-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            background: #f59e0b;
+            border: 3px solid #18181b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(245, 158, 11, 0.35);
+            margin-top: -10px;
+            transition: transform 0.12s ease, background-color 0.12s ease;
+        }
+        input[type="range"].labo-slider:active::-webkit-slider-thumb {
+            transform: scale(1.16);
+            background: #fbbf24;
+        }
+        input[type="range"].labo-slider::-moz-range-track {
+            height: 6px;
+            border-radius: 999px;
+            background: #27272a;
+            border: 1px solid #3f3f46;
+        }
+        input[type="range"].labo-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            background: #f59e0b;
+            border: 3px solid #18181b;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+        }
+
+        /* Subtle darkroom checkerboard for image frames */
+        .checkerboard {
+            background-color: #0d0d10;
+            background-image:
+                linear-gradient(45deg, #16161b 25%, transparent 25%),
+                linear-gradient(-45deg, #16161b 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #16161b 75%),
+                linear-gradient(-45deg, transparent 75%, #16161b 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+        }
+
+        /* Safe area padding for mobile bottom bar */
+        .pb-safe-bar {
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5.5rem);
+        }
+        .bottom-bar-safe {
+            padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.65rem);
+        }
+        .pt-safe-top {
+            padding-top: env(safe-area-inset-top, 0px);
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.88); opacity: 0.7; }
+            100% { transform: scale(1.38); opacity: 0; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 1.3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#09090b">
+    <link rel="icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
-<body>
-<main>
-  <h1>SaryVelona</h1>
-  <p class="sub">Ovay sary miloko ny négatif / Transformez vos négatifs en photos</p>
+<body class="font-sans antialiased selection:bg-amber-500 selection:text-zinc-950 min-h-screen flex flex-col">
 
-  <div class="row">
-    <button class="pri" id="bCam">📷 Maka sary</button>
-    <button id="bGal">🖼️ Galerie</button>
-  </div>
-  <input type="file" id="fCam" accept="image/*" capture="environment" hidden>
-  <input type="file" id="fGal" accept="image/*" hidden>
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="fixed top-16 inset-x-3 sm:inset-x-auto sm:right-5 sm:w-96 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <div class="stage" id="stage">
-    <div class="empty" id="empty">Alao sary ny négatif eo anoloan’ny hazavana fotsy, na misafidiana sary ao amin’ny galerie.</div>
-    <canvas id="res" hidden></canvas>
-    <canvas id="org" hidden></canvas>
-    <span class="tag" id="tA" style="right:8px" hidden>Vokatra</span>
-    <span class="tag" id="tB" style="left:8px" hidden>Négatif</span>
-  </div>
-  <input type="range" class="cmp" id="cmp" min="0" max="100" value="0" aria-label="Fampitahana négatif sy vokatra" hidden>
+    <!-- Compact Sticky Mobile-First Top Header -->
+    <header class="sticky top-0 z-40 bg-darkroom-950/95 backdrop-blur-md border-b border-zinc-800/90 pt-safe-top">
+        <div class="max-w-6xl mx-auto px-3.5 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+            <!-- Brand -->
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-zinc-950 shadow-md shadow-amber-500/20 shrink-0">
+                    <i class="fa-solid fa-film text-base"></i>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-sm sm:text-base font-bold text-white tracking-tight truncate">Labo Sary Négatif AI</h1>
+                    <p class="text-[11px] text-zinc-400 truncate">Négatif &bull; 4K &bull; Gemini AI Bridge</p>
+                </div>
+            </div>
 
-  <div class="box">
-    <h2>Fanovana</h2>
-    <label class="chk"><input type="checkbox" id="inv" checked> Hamadika négatif (inversion)</label>
-    <label class="chk"><input type="checkbox" id="mask" checked> Hanala ny loko volomboasary (masque orange)</label>
-    <label class="chk"><input type="checkbox" id="bw"> Mainty sy fotsy argentique</label>
-  </div>
+            <!-- Right Quick Reset / Status -->
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Direct Gemini AI
+                </span>
+                <button id="headerResetBtn" onclick="resetApp()" class="hidden px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 active:scale-95 text-xs font-medium text-zinc-200 border border-zinc-700 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left text-amber-400"></i>
+                    <span>Sary Vaovao</span>
+                </button>
+            </div>
+        </div>
 
-  <div class="box">
-    <h2>Fanitsiana</h2>
-    <div class="sl"><div><span>Hazavana (luminosité)</span><b id="vbr">0</b></div><input type="range" id="br" min="-100" max="100" value="0"></div>
-    <div class="sl"><div><span>Fifanoherana (contraste)</span><b id="vco">0</b></div><input type="range" id="co" min="-100" max="100" value="0"></div>
-    <div class="sl"><div><span>Herin’ny loko (saturation)</span><b id="vsa">0</b></div><input type="range" id="sa" min="-100" max="100" value="0"></div>
-    <div class="sl"><div><span>Hafanana (température)</span><b id="vte">0</b></div><input type="range" id="te" min="-60" max="60" value="0"></div>
-    <div class="sl"><div><span>Netteté (fanamafisana)</span><b id="vsh">0</b></div><input type="range" id="sh" min="0" max="100" value="0"></div>
-    <div class="sl"><div><span>Fanalana grain / bruit</span><b id="vdn">0</b></div><input type="range" id="dn" min="0" max="100" value="0"></div>
-    <div class="sl"><div><span>Fanalana vovoka sy kapoka</span><b id="vdv">0</b></div><input type="range" id="dv" min="0" max="100" value="0"></div>
-    <p class="guide" style="list-style:none;padding:0;margin:4px 0 8px">Ampiasao tsikelikely: raha be loatra ny fanalana vovoka dia mety ho very ny antsipiriany madinika.</p>
-    <div class="sl"><div><span>Hanapaka sisiny (rognage)</span><b id="vcr">0%</b></div><input type="range" id="cr" min="0" max="20" value="0"></div>
-    <button id="rst" style="margin-top:6px;width:100%">Averina ny fanitsiana</button>
-  </div>
+        <!-- Mobile-First Step Indicator Bar (4 Steps) -->
+        <div class="border-t border-zinc-800/70 bg-darkroom-900/90">
+            <div class="max-w-6xl mx-auto px-2 sm:px-6 py-1.5">
+                <nav aria-label="Dingana" class="grid grid-cols-4 gap-1">
+                    <button type="button" id="navStep1" onclick="goToStep(1)" class="step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-amber-500 text-zinc-950 transition">
+                        <span class="w-4 h-4 rounded-full bg-zinc-950/20 text-[10px] font-bold flex items-center justify-center shrink-0">1</span>
+                        <span class="truncate">Sary</span>
+                    </button>
+                    <button type="button" id="navStep2" onclick="goToStep(2)" disabled class="step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-zinc-500 disabled:opacity-45 transition">
+                        <span class="w-4 h-4 rounded-full bg-zinc-800 text-[10px] font-bold flex items-center justify-center shrink-0">2</span>
+                        <span class="truncate">Recadrage</span>
+                    </button>
+                    <button type="button" id="navStep3" onclick="goToStep(3)" disabled class="step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-zinc-500 disabled:opacity-45 transition">
+                        <span class="w-4 h-4 rounded-full bg-zinc-800 text-[10px] font-bold flex items-center justify-center shrink-0">3</span>
+                        <span class="truncate">Labo 4K</span>
+                    </button>
+                    <button type="button" id="navStep4" onclick="goToStep(4)" disabled class="step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-zinc-500 disabled:opacity-45 transition">
+                        <span class="w-4 h-4 rounded-full bg-zinc-800 text-[10px] font-bold flex items-center justify-center shrink-0">4</span>
+                        <span class="truncate">Tirage &amp; AI</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-  <div class="box">
-    <h2>Hitahiry sary (tirage)</h2>
-    <div class="row">
-      <button class="pri" id="xPng">PNG</button>
-      <button class="pri" id="xJpg">JPG</button>
+    <!-- Main Workspace -->
+    <main class="flex-1 w-full max-w-6xl mx-auto px-3 sm:px-6 pt-3 pb-safe-bar md:pb-10">
+
+        <!-- ========================================================= -->
+        <!-- STEP 1: HAKA SARY (Camera / Gallery & Source Mode)        -->
+        <!-- ========================================================= -->
+        <section id="step1Section" class="space-y-3.5 max-w-2xl mx-auto">
+            <!-- Mode Selector Card -->
+            <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-3.5 sm:p-5 shadow-lg space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">1. Karazana Sary</span>
+                    <span class="text-[11px] text-zinc-400">Safidio aloha</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <button type="button" id="modeSelectNegative" onclick="setSourceInputMode('negative')" class="flex items-center gap-3 p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/15 text-left transition active:scale-[0.99]">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-zinc-950 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-film text-base"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-bold text-white">Cliché Négatif (Pellicule)</div>
+                            <div class="text-xs text-zinc-300 leading-snug">Mamadika ny négatif ho positif sy manala masque</div>
+                        </div>
+                    </button>
+
+                    <button type="button" id="modeSelectPositive" onclick="setSourceInputMode('positive')" class="flex items-center gap-3 p-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 hover:border-zinc-700 text-left transition active:scale-[0.99]">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-image text-base"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-bold text-white">Sary Positif Efa Misy</div>
+                            <div class="text-xs text-zinc-400 leading-snug">Manatsara loko, netteté ary 4K ho an'ny tirage</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Big Thumb-Friendly Camera & Gallery Capture Buttons -->
+            <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-3.5 sm:p-5 shadow-lg space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">2. Hampiditra Sary</span>
+                    <span class="text-[11px] text-zinc-400">PNG, JPG, WEBP</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Direct Camera Capture -->
+                    <label class="cursor-pointer group flex items-center sm:flex-col justify-start sm:justify-center gap-3.5 p-4 sm:p-6 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-950 shadow-lg shadow-amber-500/20 transition active:scale-[0.98]">
+                        <div class="w-12 h-12 rounded-2xl bg-zinc-950/15 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-camera text-xl"></i>
+                        </div>
+                        <div class="text-left sm:text-center min-w-0">
+                            <span class="block text-sm sm:text-base font-extrabold">Haka sary (Appareil Photo)</span>
+                            <span class="block text-xs font-medium text-zinc-900/85 mt-0.5">Hampiasa ny fakantsarin'ny finday</span>
+                        </div>
+                        <input type="file" id="cameraInput" accept="image/png, image/jpeg, image/webp" capture="environment" class="hidden">
+                    </label>
+
+                    <!-- Gallery File Picker -->
+                    <label class="cursor-pointer group flex items-center sm:flex-col justify-start sm:justify-center gap-3.5 p-4 sm:p-6 rounded-2xl bg-zinc-800/90 hover:bg-zinc-800 border border-zinc-700 text-white transition active:scale-[0.98]">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-images text-xl"></i>
+                        </div>
+                        <div class="text-left sm:text-center min-w-0">
+                            <span class="block text-sm sm:text-base font-bold">Hisafidy avy ao amin'ny Galerie</span>
+                            <span class="block text-xs text-zinc-400 mt-0.5">Sary efa voatahiry (PNG / JPG / WEBP)</span>
+                        </div>
+                        <input type="file" id="galleryInput" accept="image/png, image/jpeg, image/webp" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Practical Mobile Darkroom Tip Card -->
+            <div class="bg-amber-500/10 border border-amber-500/25 rounded-2xl p-3.5 flex items-start gap-3">
+                <i class="fa-solid fa-lightbulb text-amber-400 mt-0.5 text-base shrink-0"></i>
+                <div class="text-xs text-zinc-300 leading-relaxed space-y-1">
+                    <p class="font-semibold text-amber-300">Torohevitra hakana sary Cliché Négatif :</p>
+                    <p>Sokafy efijery fotsy mazava (solosaina na tablette) dia apetraho eo amboniny ilay pellicule négatif. Alao sary akaiky tsara sy mahitsy, dia tapaho ny sisiny ao amin'ny dingana manaraka.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STEP 2: RECADRAGE (Touch Interactive Canvas Cropper)      -->
+        <!-- ========================================================= -->
+        <section id="step2Section" class="hidden">
+            <div class="flex flex-col md:grid md:grid-cols-12 md:gap-6 items-start">
+                <!-- Sticky Mobile Top Preview / Interactive Crop Canvas -->
+                <div class="w-full md:col-span-7 sticky top-[88px] md:top-24 z-20 bg-darkroom-950/95 pb-2 md:pb-0">
+                    <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-2.5 sm:p-4 shadow-xl space-y-2">
+                        <div class="flex items-center justify-between gap-2 px-1">
+                            <span class="text-xs font-semibold text-zinc-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-crop-simple text-amber-400"></i>
+                                <span>Tariho ny zorony hanapahana</span>
+                            </span>
+                            <button type="button" id="cropPreviewToggleBtn" onclick="toggleCropPreviewMode()" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 active:scale-95 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-eye"></i>
+                                <span id="cropPreviewToggleText">Jery Positif</span>
+                            </button>
+                        </div>
+
+                        <div id="cropCanvasWrapper" class="relative w-full rounded-xl overflow-hidden checkerboard border border-zinc-800 flex items-center justify-center min-h-[210px] max-h-[44vh] md:max-h-[62vh]">
+                            <canvas id="cropCanvas" class="block max-w-full max-h-[42vh] md:max-h-[60vh] touch-none cursor-crosshair"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scrollable Crop Controls Underneath (Mobile) / Right Column (Desktop) -->
+                <div class="w-full md:col-span-5 space-y-3 mt-1 md:mt-0">
+                    <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-3.5 sm:p-4 space-y-3.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">Habe Tirage Papier</span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="rotateCropSource(-90)" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-800 hover:bg-zinc-700 active:scale-95 text-amber-400 border border-zinc-700 flex items-center gap-1 transition" title="Ahodina Havia 90°">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    <span>-90°</span>
+                                </button>
+                                <button type="button" onclick="rotateCropSource(90)" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-800 hover:bg-zinc-700 active:scale-95 text-amber-400 border border-zinc-700 flex items-center gap-1 transition" title="Ahodina Havanana 90°">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                    <span>+90°</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Horizontally Scrollable Aspect Ratio Pills -->
+                        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                            <button type="button" onclick="setCropAspect(null)" data-ratio="free" class="crop-ratio-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-500 text-zinc-950 transition">
+                                Malalaka
+                            </button>
+                            <button type="button" onclick="setCropAspect(1.5)" data-ratio="1.5" class="crop-ratio-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition">
+                                10&times;15 (3:2)
+                            </button>
+                            <button type="button" onclick="setCropAspect(1.4)" data-ratio="1.4" class="crop-ratio-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition">
+                                13&times;18 (5:7)
+                            </button>
+                            <button type="button" onclick="setCropAspect(1)" data-ratio="1" class="crop-ratio-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition">
+                                1:1 Carré
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-zinc-400 leading-relaxed">
+                            Esory daholo ny sisin'ny pellicule mainty na fotsy mba ho ny sary ihany no kajiana ao amin'ny <strong class="text-zinc-200">Auto-Balance Loko</strong>.
+                        </p>
+
+                        <!-- Desktop Action Buttons (Mobile uses Fixed Bottom Bar) -->
+                        <div class="hidden md:grid grid-cols-2 gap-3 pt-2">
+                            <button type="button" onclick="goToStep(1)" class="py-3 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold text-xs border border-zinc-700 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Hiverina</span>
+                            </button>
+                            <button type="button" onclick="applyCrop()" class="py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2">
+                                <span>Hampihatra &amp; Tohizana</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STEP 3: LABO LOKO & DÉTAILS 4K (Local Color & Sharpness)  -->
+        <!-- ========================================================= -->
+        <section id="step3Section" class="hidden">
+            <div class="flex flex-col md:grid md:grid-cols-12 md:gap-6 items-start">
+                <!-- Sticky Mobile Top Live Preview Canvas -->
+                <div class="w-full md:col-span-7 sticky top-[88px] md:top-24 z-20 bg-darkroom-950/95 pb-2 md:pb-0">
+                    <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-2.5 sm:p-4 shadow-xl space-y-2">
+                        <div class="flex items-center justify-between gap-2 px-1">
+                            <div class="flex items-center gap-1.5 min-w-0">
+                                <span id="livePreviewBadge" class="px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[11px] font-semibold truncate">
+                                    Sary Positif Voahitsy
+                                </span>
+                                <span id="liveDimText" class="text-[11px] font-mono text-zinc-400"></span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button type="button" onpointerdown="showOriginalHold(true)" onpointerup="showOriginalHold(false)" onpointerleave="showOriginalHold(false)" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-zinc-800 active:bg-amber-500 active:text-zinc-950 text-zinc-200 border border-zinc-700 select-none transition">
+                                    <i class="fa-solid fa-eye mr-1"></i>Hijery ny Négatif / Aloha
+                                </button>
+                                <button type="button" onclick="rotateStep3Image()" class="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="relative w-full rounded-xl overflow-hidden checkerboard border border-zinc-800 flex items-center justify-center min-h-[200px] max-h-[44vh] md:max-h-[62vh]">
+                            <canvas id="previewCanvas" class="block max-w-full max-h-[42vh] md:max-h-[60vh] object-contain"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scrollable Darkroom Controls Underneath (Mobile) / Right Column (Desktop) -->
+                <div class="w-full md:col-span-5 space-y-3 mt-1 md:mt-0">
+                    <!-- Quick Action Strip: Auto-Balance + Reset + Mask Selector -->
+                    <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-3.5 space-y-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <button type="button" id="autoBalanceBtn" onclick="toggleAutoBalance()" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold bg-amber-500 text-zinc-950 shadow transition flex items-center justify-center gap-1.5 active:scale-[0.98]">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span id="autoBalanceText">Auto-Balance Loko: ON</span>
+                            </button>
+                            <button type="button" onclick="resetLaboSliders()" class="py-2.5 px-3 rounded-xl text-xs font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition active:scale-[0.98]">
+                                <i class="fa-solid fa-rotate-left mr-1 text-amber-400"></i>Averina
+                            </button>
+                        </div>
+
+                        <!-- Film Mask Selector -->
+                        <div id="maskSelectorBlock" class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Masque Pellicule Négatif :</span>
+                                <span class="text-[11px] text-zinc-500">Fanesorana loko fototra</span>
+                            </div>
+                            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+                                <button type="button" onclick="setFilmMask('orange')" data-mask="orange" class="mask-pill shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500 transition flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+                                    <span>Orange (Kodak/Fuji)</span>
+                                </button>
+                                <button type="button" onclick="setFilmMask('blue')" data-mask="blue" class="mask-pill shrink-0 px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                    <span>Bleu / Froid</span>
+                                </button>
+                                <button type="button" onclick="setFilmMask('none')" data-mask="none" class="mask-pill shrink-0 px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                                    <span>Tsy misy masque</span>
+                                </button>
+                                <button type="button" onclick="setFilmMask('bw')" data-mask="bw" class="mask-pill shrink-0 px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-zinc-300"></span>
+                                    <span>Mainty sy Fotsy (N&amp;B)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Light & Color Sliders Card -->
+                    <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-3.5 space-y-2.5">
+                        <span class="block text-xs font-semibold uppercase tracking-wider text-amber-400">Hazavana &amp; Loko</span>
+
+                        <!-- Exposition / Hazavana -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Exposition / Hazavana</span>
+                                <span id="valExposure" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">0</span>
+                            </div>
+                            <input type="range" id="sliderExposure" min="-60" max="60" value="0" class="labo-slider">
+                        </div>
+
+                        <!-- Contraste -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Contraste</span>
+                                <span id="valContrast" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">10</span>
+                            </div>
+                            <input type="range" id="sliderContrast" min="-40" max="65" value="10" class="labo-slider">
+                        </div>
+
+                        <!-- Saturation -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Saturation (Hery Loko)</span>
+                                <span id="valSaturation" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">15</span>
+                            </div>
+                            <input type="range" id="sliderSaturation" min="-50" max="70" value="15" class="labo-slider">
+                        </div>
+
+                        <!-- Température (Loko mafana / mangatsiaka) -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Température (Mafana / Mangatsiaka)</span>
+                                <span id="valTemperature" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">0</span>
+                            </div>
+                            <input type="range" id="sliderTemperature" min="-50" max="50" value="0" class="labo-slider">
+                        </div>
+                    </div>
+
+                    <!-- Sharpness & 4K Detail Sliders Card -->
+                    <div class="bg-darkroom-900 border border-zinc-800 rounded-2xl p-3.5 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">Netteté &amp; Détails 4K</span>
+                            <span class="text-[11px] text-emerald-400 font-medium">Tirage HD</span>
+                        </div>
+
+                        <!-- Netteté (Unsharp Mask) -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Netteté (Unsharp Mask)</span>
+                                <span id="valSharpness" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">60%</span>
+                            </div>
+                            <input type="range" id="sliderSharpness" min="0" max="120" value="60" class="labo-slider">
+                        </div>
+
+                        <!-- Micro-Détails -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Micro-Détails (Clarté)</span>
+                                <span id="valDetails" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">40%</span>
+                            </div>
+                            <input type="range" id="sliderDetails" min="0" max="100" value="40" class="labo-slider">
+                        </div>
+
+                        <!-- Anti-Grain / Lissage -->
+                        <div class="space-y-0.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-zinc-200 font-medium">Anti-Grain / Lissage</span>
+                                <span id="valDenoise" class="px-2 py-0.5 rounded bg-zinc-800 text-amber-400 font-mono text-[11px]">25%</span>
+                            </div>
+                            <input type="range" id="sliderDenoise" min="0" max="80" value="25" class="labo-slider">
+                        </div>
+
+                        <!-- Desktop Generate 4K Button -->
+                        <div class="hidden md:grid grid-cols-2 gap-3 pt-2">
+                            <button type="button" onclick="goToStep(2)" class="py-3 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold text-xs border border-zinc-700 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-crop-simple"></i>
+                                <span>Recadrage</span>
+                            </button>
+                            <button type="button" onclick="buildFinal4KResult()" class="py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>Amboary 4K Tirage</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STEP 4: FAMPITAHANA, TIRAGE 4K & DIRECT GEMINI AI BRIDGE  -->
+        <!-- ========================================================= -->
+        <section id="step4Section" class="hidden max-w-3xl mx-auto space-y-3.5">
+            <!-- Header & Resolution Badge -->
+            <div class="bg-darkroom-900 border border-amber-500/40 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-3.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                            <span>Sary 4K Vonona ho amin'ny Tirage</span>
+                        </h2>
+                        <p class="text-xs text-zinc-400">Mikisaha eo ambony sary hijerena ny fahasamihafana</p>
+                    </div>
+                    <span id="finalResBadge" class="px-3 py-1 rounded-xl bg-zinc-950 border border-amber-500/35 text-xs font-mono font-semibold text-amber-300">
+                        3840 &times; 2560 px - Qualité 4K
+                    </span>
+                </div>
+
+                <!-- Interactive Touch Before/After Slider -->
+                <div id="compareContainer" class="relative w-full overflow-hidden rounded-2xl checkerboard border border-zinc-700 select-none touch-none shadow-inner cursor-ew-resize">
+                    <!-- After Image (4K Enhanced) -->
+                    <img id="finalAfterImg" src="" alt="Sary 4K nohatsaraina" class="block w-full h-auto max-h-[52vh] object-contain mx-auto pointer-events-none">
+
+                    <!-- Before Image (Original / Unprocessed) Clipped Overlay -->
+                    <div id="beforeClipWrapper" class="absolute inset-0 overflow-hidden pointer-events-none" style="width: 50%;">
+                        <img id="finalBeforeImg" src="" alt="Sary taloha" class="block w-full h-full object-contain max-w-none">
+                    </div>
+
+                    <!-- Slider Divider Line & Handle -->
+                    <div id="sliderDivider" class="absolute top-0 bottom-0 w-0.5 bg-amber-400 shadow-[0_0_12px_rgba(0,0,0,0.9)] pointer-events-none" style="left: 50%;">
+                        <div class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-amber-500 text-zinc-950 shadow-xl border-2 border-white flex items-center justify-center">
+                            <i class="fa-solid fa-arrows-left-right text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Labels -->
+                    <span class="absolute top-2.5 left-2.5 bg-black/75 backdrop-blur-sm text-zinc-200 text-[11px] font-semibold px-2.5 py-1 rounded-lg border border-white/10 pointer-events-none">
+                        Taloha
+                    </span>
+                    <span class="absolute top-2.5 right-2.5 bg-amber-500 text-zinc-950 text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow pointer-events-none">
+                        4K Tirage
+                    </span>
+                </div>
+
+                <!-- Prominent Primary Bridge Button to Gemini AI -->
+                <div class="pt-1 space-y-2.5">
+                    <button type="button" onclick="launchGeminiAIBridge()" class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-500 hover:from-indigo-400 hover:via-purple-400 hover:to-amber-400 active:scale-[0.98] text-white font-extrabold text-sm sm:text-base shadow-xl shadow-indigo-500/25 flex items-center justify-center gap-2.5 transition">
+                        <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                        <span>✨ Hatsarao ao amin'ny Gemini AI</span>
+                    </button>
+                    <p class="text-[11px] text-center text-zinc-400 leading-relaxed">
+                        Mitahiry avy hatrany ny sary 4K ao amin'ny finday, mandika (<strong class="text-zinc-200">Copier</strong>) ny baiko, ary manokatra mivantana ny <strong class="text-indigo-300">gemini.google.com</strong>.
+                    </p>
+                </div>
+
+                <!-- Direct Local Download Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <button type="button" onclick="download4KImage('jpg')" class="py-3.5 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 active:scale-[0.98] text-zinc-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-download text-base"></i>
+                        <span>Tehirizo JPG 4K (Tirage)</span>
+                    </button>
+                    <button type="button" onclick="download4KImage('png')" class="py-3.5 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-zinc-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-file-image text-base"></i>
+                        <span>Tehirizo PNG 4K (Sans perte)</span>
+                    </button>
+                </div>
+
+                <!-- Editable Gemini Prompt Box -->
+                <div class="bg-zinc-950/90 border border-zinc-800 rounded-2xl p-3.5 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <label for="geminiPromptInput" class="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-terminal"></i>
+                            <span>Hanova ny baiko (Prompt Gemini AI)</span>
+                        </label>
+                        <button type="button" onclick="manualCopyPrompt()" class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 active:scale-95 text-[11px] font-semibold text-zinc-200 border border-zinc-700 flex items-center gap-1.5 transition">
+                            <i class="fa-regular fa-copy text-amber-400"></i>
+                            <span>Adikao (Copier)</span>
+                        </button>
+                    </div>
+                    <textarea id="geminiPromptInput" rows="2" class="w-full rounded-xl bg-darkroom-900 border border-zinc-700 focus:border-indigo-500 focus:outline-none p-2.5 text-xs text-zinc-200 leading-relaxed resize-none">Améliorer cette image, ultra-réaliste, résolution 4k, hyper détaillé, netteté parfaite, éclairage professionnel, couleurs corrigées, qualité photo.</textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gemini Bridge Confirmation Modal -->
+        <div id="geminiModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 sm:p-4">
+            <div class="bg-darkroom-900 border border-indigo-500/50 rounded-3xl p-5 max-w-md w-full space-y-4 shadow-2xl">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-amber-500 text-white flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm sm:text-base font-bold text-white">Vonona ho ao amin'ny Gemini AI!</h3>
+                            <p class="text-xs text-emerald-400 font-medium">Sary voatahiry &bull; Baiko voadika</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeGeminiModal()" class="w-8 h-8 rounded-xl bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-3.5 text-xs text-zinc-200 leading-relaxed space-y-2">
+                    <p class="font-semibold text-amber-300">Voatahiry ny sary 4K ary voadika ny baiko! Apetaho (Coller) fotsiny ao amin'ny Gemini ary ampidiro (+) ilay sary.</p>
+                    <ol class="list-decimal list-inside space-y-1 text-zinc-300">
+                        <li>Ao amin'ny <strong>gemini.google.com</strong>, tsindrio ny <strong>+</strong> dia safidio ilay sary <code class="text-amber-300">sary_positif_4k_gemini.jpg</code>.</li>
+                        <li>Tsindrio eo amin'ny toerana fanoratana dia ataovy <strong>Coller (Paste)</strong> ny baiko.</li>
+                        <li>Alefaso (<strong>Envoyer</strong>) mba hanatsaran'ny Gemini azy!</li>
+                    </ol>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" onclick="closeGeminiModal()" class="py-3 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold text-xs border border-zinc-700 transition">
+                        Akatona
+                    </button>
+                    <a href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" onclick="closeGeminiModal()" class="py-3 px-4 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-500/25 transition">
+                        <span>Sokafy Gemini</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Processing Overlay Spinner (for 4K Upscale & Unsharp Pass) -->
+        <div id="processingOverlay" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-darkroom-900 border border-amber-500/40 rounded-3xl p-6 max-w-xs w-full text-center space-y-3.5 shadow-2xl">
+                <div class="relative w-14 h-14 mx-auto flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full bg-amber-500/30 animate-pulse-ring"></div>
+                    <div class="w-10 h-10 rounded-full border-4 border-amber-500 border-t-transparent animate-spin"></div>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-sm font-bold text-amber-400">EO AM-PANAMBOARANA 4K...</p>
+                    <p class="text-xs text-zinc-300">Manatsara ny loko, ny netteté (Unsharp Mask), ary ny habe 4K ho an'ny tirage.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- FIXED MOBILE BOTTOM ACTION BAR (< 768px)                  -->
+    <!-- ========================================================= -->
+    <div id="mobileBottomBar" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-darkroom-950/95 backdrop-blur-md border-t border-zinc-800 px-3 pt-2.5 bottom-bar-safe">
+        <!-- Step 1 Bottom Bar -->
+        <div id="bottomBarStep1" class="flex items-center justify-between gap-2 text-xs text-zinc-400 px-1 py-1">
+            <span><i class="fa-solid fa-circle-info text-amber-400 mr-1.5"></i>Safidio ny fakantsary na galerie etsy ambony</span>
+        </div>
+
+        <!-- Step 2 Bottom Bar -->
+        <div id="bottomBarStep2" class="hidden grid grid-cols-5 gap-2">
+            <button type="button" onclick="goToStep(1)" class="col-span-2 py-3 px-3 rounded-xl bg-zinc-800 active:scale-95 text-zinc-200 font-semibold text-xs border border-zinc-700 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Hiverina</span>
+            </button>
+            <button type="button" onclick="applyCrop()" class="col-span-3 py-3 px-3 rounded-xl bg-amber-500 active:scale-95 text-zinc-950 font-extrabold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-1.5">
+                <span>Hampihatra &amp; Tohizana</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- Step 3 Bottom Bar -->
+        <div id="bottomBarStep3" class="hidden grid grid-cols-5 gap-2">
+            <button type="button" onclick="goToStep(2)" class="col-span-2 py-3 px-3 rounded-xl bg-zinc-800 active:scale-95 text-zinc-200 font-semibold text-xs border border-zinc-700 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-crop-simple text-amber-400"></i>
+                <span>Recadrer</span>
+            </button>
+            <button type="button" onclick="buildFinal4KResult()" class="col-span-3 py-3 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 active:scale-95 text-zinc-950 font-extrabold text-xs shadow-lg shadow-amber-500/25 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Amboary 4K Tirage</span>
+            </button>
+        </div>
+
+        <!-- Step 4 Bottom Bar -->
+        <div id="bottomBarStep4" class="hidden grid-cols-6 gap-1.5">
+            <button type="button" onclick="goToStep(3)" class="col-span-1 py-3 px-1.5 rounded-xl bg-zinc-800 active:scale-95 text-zinc-200 font-semibold text-xs border border-zinc-700 flex items-center justify-center" title="Hiverina amin'ny Labo">
+                <i class="fa-solid fa-sliders text-amber-400"></i>
+            </button>
+            <button type="button" onclick="download4KImage('jpg')" class="col-span-2 py-3 px-2 rounded-xl bg-amber-500 active:scale-95 text-zinc-950 font-extrabold text-xs flex items-center justify-center gap-1">
+                <i class="fa-solid fa-download"></i>
+                <span>JPG 4K</span>
+            </button>
+            <button type="button" onclick="launchGeminiAIBridge()" class="col-span-3 py-3 px-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 active:scale-95 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-500/25">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Gemini AI</span>
+            </button>
+        </div>
     </div>
-  </div>
 
-  <div class="box">
-    <h2>Fomba fampiasana / Mode d’emploi</h2>
-    <ol class="guide">
-      <li>Apetraho eo anoloan’ny efijery fotsy mazava ny négatif, dia makà sary.</li>
-      <li>Hita avy hatrany ny sary miloko. Hanitsy ny fanitsiana raha ilaina.</li>
-      <li>Ho an’ny négatif mainty sy fotsy: andrasana ny « Mainty sy fotsy ».</li>
-      <li>Tsindrio PNG na JPG ary tahiry ny sary vita.</li>
-    </ol>
-  </div>
-</main>
+    <script>
+        // =============================================================
+        // 1. APPLICATION STATE & DOM REFERENCES
+        // =============================================================
+        let currentStep = 1;
+        let maxUnlockedStep = 1;
+        let sourceInputMode = 'negative'; // 'negative' | 'positive'
 
-<div id="ov">
-  <p id="ovt">Tsindrio lava ny sary, dia safidio « Tahiry sary » / Appuyez longuement sur l’image pour l’enregistrer.</p>
-  <img id="ovi" alt="Sary vita">
-  <button class="pri" id="ovs" hidden>Zarao / Partager</button>
-  <button id="ovc">Hidio / Fermer</button>
-</div>
+        let rawUploadedImage = null; // Original HTMLImageElement
+        let workingImage = null;     // Cropped HTMLImageElement / Canvas
 
-<script>
-(function(){
-var $=function(i){return document.getElementById(i)};
-var img=null,pending=false,blobUrl=null;
-var ids=['br','co','sa','te','cr','sh','dn','dv'];
+        // Step 2 Crop state
+        let cropRotation = 0;
+        let cropPreviewInverted = true;
+        let cropAspectRatio = null; // null = free, or numeric w/h ratio
+        let cropSourceCanvas = document.createElement('canvas');
+        let cropBox = { x: 0, y: 0, w: 0, h: 0 };
+        let activeDragMode = null; // 'move' | 'nw' | 'ne' | 'sw' | 'se' | null
+        let dragStartPt = { x: 0, y: 0 };
+        let dragStartBox = { x: 0, y: 0, w: 0, h: 0 };
 
-function load(f){
-  if(!f)return;
-  var u=URL.createObjectURL(f),im=new Image();
-  im.onload=function(){img=im;URL.revokeObjectURL(u);
-    $('empty').hidden=true;
-    ['res','org','tA','tB','cmp'].forEach(function(k){$(k).hidden=false});
-    render()};
-  im.onerror=function(){$('empty').textContent='Tsy azo vakiana io sary io. Andramo sary hafa.'};
-  im.src=u;
-}
-function crop(){return +$('cr').value/100}
-function draw(max){
-  var c=crop(),sx=img.width*c,sy=img.height*c,sw=img.width-2*sx,sh=img.height-2*sy;
-  var s=Math.min(1,max/Math.max(sw,sh)),cv=document.createElement('canvas');
-  cv.width=Math.max(1,Math.round(sw*s));cv.height=Math.max(1,Math.round(sh*s));
-  cv.getContext('2d',{willReadFrequently:true}).drawImage(img,sx,sy,sw,sh,0,0,cv.width,cv.height);
-  return cv;
-}
-function box(s,w,h,r){var t=new Float32Array(w*h),o=new Float32Array(w*h),c=2*r+1,x,y,a,b,m,q;
-  for(y=0;y<h;y++){m=y*w;a=0;for(x=-r;x<=r;x++)a+=s[m+Math.min(w-1,Math.max(0,x))];
-    for(x=0;x<w;x++){t[m+x]=a/c;a+=s[m+Math.min(w-1,x+r+1)]-s[m+Math.max(0,x-r)]}}
-  for(x=0;x<w;x++){a=0;for(y=-r;y<=r;y++)a+=t[Math.min(h-1,Math.max(0,y))*w+x];
-    for(y=0;y<h;y++){o[y*w+x]=a/c;a+=t[Math.min(h-1,y+r+1)*w+x]-t[Math.max(0,y-r)*w+x]}}
-  return o}
-function enhance(d,w,h){
-  var sh=+$('sh').value,dn=+$('dn').value,dv=+$('dv').value;
-  if(!sh&&!dn&&!dv)return;
-  var N=w*h,L=new Float32Array(N),C,p,i,bl,df,T,wt,big=Math.max(w,h);
-  for(p=0,i=0;p<N;p++,i+=4)L[p]=.299*d[i]+.587*d[i+1]+.114*d[i+2];
-  C=new Float32Array(L);
-  if(dv){T=90-.7*dv;bl=box(C,w,h,Math.max(2,Math.round(big/200)));
-    for(p=0;p<N;p++){df=C[p]-bl[p];wt=(Math.abs(df)-T/2)/(T/2);wt=wt<0?0:wt>1?1:wt;C[p]-=wt*df}}
-  if(dn){bl=box(C,w,h,Math.max(1,Math.round(big/900)));var a=dn/100*.8;
-    for(p=0;p<N;p++)C[p]+=a*(bl[p]-C[p])}
-  if(sh){bl=box(C,w,h,Math.max(1,Math.round(big/700)));var g=sh/100*1.5;
-    for(p=0;p<N;p++)C[p]+=g*(C[p]-bl[p])}
-  for(p=0,i=0;p<N;p++,i+=4){df=C[p]-L[p];d[i]+=df;d[i+1]+=df;d[i+2]+=df}
-}
-function process(cv){
-  var x=cv.getContext('2d'),id=x.getImageData(0,0,cv.width,cv.height),d=id.data,n=d.length,i,k;
-  var inv=$('inv').checked,mk=$('mask').checked,bw=$('bw').checked;
-  var br=+$('br').value*2.55,co=+$('co').value*2.55,sa=1+(+$('sa').value)/100,te=+$('te').value;
-  var cf=(259*(co+255))/(255*(259-co));
-  if(inv)for(i=0;i<n;i+=4){d[i]=255-d[i];d[i+1]=255-d[i+1];d[i+2]=255-d[i+2]}
-  var lo=[0,0,0],hi=[255,255,255];
-  if(mk){
-    var h=[new Uint32Array(256),new Uint32Array(256),new Uint32Array(256)],tot=0;
-    for(i=0;i<n;i+=8){h[0][d[i]]++;h[1][d[i+1]]++;h[2][d[i+2]]++;tot++}
-    for(k=0;k<3;k++){var a=0,f=false;lo[k]=0;hi[k]=255;
-      for(var v=0;v<256;v++){a+=h[k][v];
-        if(!f&&a>=tot*0.005){lo[k]=v;f=true}
-        if(a>=tot*0.995){hi[k]=v;break}}
-      if(hi[k]-lo[k]<8)hi[k]=lo[k]+8}
-  }
-  var r,g,b,l;
-  for(i=0;i<n;i+=4){
-    r=(d[i]-lo[0])*255/(hi[0]-lo[0]);g=(d[i+1]-lo[1])*255/(hi[1]-lo[1]);b=(d[i+2]-lo[2])*255/(hi[2]-lo[2]);
-    r+=br+te;g+=br;b+=br-te;
-    r=(r-128)*cf+128;g=(g-128)*cf+128;b=(b-128)*cf+128;
-    l=.299*r+.587*g+.114*b;
-    if(bw){r=g=b=l}else{r=l+(r-l)*sa;g=l+(g-l)*sa;b=l+(b-l)*sa}
-    d[i]=r;d[i+1]=g;d[i+2]=b;
-  }
-  enhance(d,cv.width,cv.height);
-  x.putImageData(id,0,0);
-}
-function render(){
-  if(!img)return;
-  var base=draw(900),res=$('res'),org=$('org');
-  res.width=org.width=base.width;res.height=org.height=base.height;
-  org.getContext('2d').drawImage(base,0,0);
-  res.getContext('2d').drawImage(base,0,0);
-  process(res);
-  clip();
-}
-function clip(){$('org').style.clipPath='inset(0 '+(100-$('cmp').value)+'% 0 0)'}
-function sched(){if(pending)return;pending=true;requestAnimationFrame(function(){pending=false;render()})}
+        // Step 3 Labo 4K state
+        let step3Rotation = 0;
+        let autoBalanceEnabled = true;
+        let filmMaskType = 'orange'; // 'orange' | 'blue' | 'none' | 'bw'
+        let isHoldingOriginal = false;
+        let previewRafPending = false;
 
-ids.forEach(function(k){$(k).addEventListener('input',function(){
-  $('v'+k).textContent=$(k).value+(k==='cr'?'%':'');sched()})});
-['inv','mask','bw'].forEach(function(k){$(k).addEventListener('change',sched)});
-$('cmp').addEventListener('input',clip);
-$('rst').addEventListener('click',function(){
-  ids.forEach(function(k){$(k).value=0;$('v'+k).textContent=k==='cr'?'0%':'0'});sched()});
-$('bCam').addEventListener('click',function(){$('fCam').click()});
-$('bGal').addEventListener('click',function(){$('fGal').click()});
-$('fCam').addEventListener('change',function(e){load(e.target.files[0]);e.target.value=''});
-$('fGal').addEventListener('change',function(e){load(e.target.files[0]);e.target.value=''});
+        // Step 4 Final 4K outputs
+        let finalPngDataUrl = null;
+        let finalJpgDataUrl = null;
+        let finalWidth = 0;
+        let finalHeight = 0;
 
-function save(type,ext){
-  if(!img){alert('Alao sary aloha / Choisissez d’abord une photo.');return}
-  var cv=draw(3000);process(cv);
-  cv.toBlob(function(b){
-    if(!b)return;
-    if(blobUrl)URL.revokeObjectURL(blobUrl);
-    blobUrl=URL.createObjectURL(b);
-    var file=null;
-    try{file=new File([b],'saryvelona.'+ext,{type:type})}catch(e){}
-    $('ovi').src=blobUrl;
-    var can=file&&navigator.canShare&&navigator.canShare({files:[file]});
-    $('ovs').hidden=!can;
-    $('ovs').onclick=function(){navigator.share({files:[file],title:'SaryVelona'}).catch(function(){})};
-    $('ov').classList.add('on');
-    var a=document.createElement('a');a.href=blobUrl;a.download='saryvelona.'+ext;
-    try{a.click()}catch(e){}
-  },type,0.95);
-}
-$('xPng').addEventListener('click',function(){save('image/png','png')});
-$('xJpg').addEventListener('click',function(){save('image/jpeg','jpg')});
-$('ovc').addEventListener('click',function(){$('ov').classList.remove('on')});
-})();
-</script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}</script>
+        // Elements
+        const cameraInput = document.getElementById('cameraInput');
+        const galleryInput = document.getElementById('galleryInput');
+        const cropCanvas = document.getElementById('cropCanvas');
+        const cropCtx = cropCanvas.getContext('2d');
+        const previewCanvas = document.getElementById('previewCanvas');
+        const previewCtx = previewCanvas.getContext('2d');
+
+        // =============================================================
+        // 2. TOAST NOTIFICATIONS & NAVIGATION
+        // =============================================================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'bg-emerald-950/95 border-emerald-500/60 text-emerald-100',
+                error: 'bg-rose-950/95 border-rose-500/60 text-rose-100',
+                info: 'bg-zinc-900/95 border-amber-500/50 text-zinc-100'
+            };
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                error: 'fa-circle-exclamation text-rose-400',
+                info: 'fa-circle-info text-amber-400'
+            };
+
+            toast.className = `pointer-events-auto flex items-start gap-2.5 p-3 rounded-2xl border shadow-2xl backdrop-blur-md text-xs leading-relaxed transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icons[type] || icons.info} text-sm mt-0.5 shrink-0"></i>
+                <span class="flex-1 font-medium">${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 4200);
+        }
+
+        function goToStep(step) {
+            if (step > maxUnlockedStep) return;
+            currentStep = step;
+
+            // Toggle step sections
+            for (let i = 1; i <= 4; i++) {
+                const sec = document.getElementById(`step${i}Section`);
+                if (sec) sec.classList.toggle('hidden', i !== step);
+
+                const bar = document.getElementById(`bottomBarStep${i}`);
+                if (bar) {
+                    if (i === step) {
+                        bar.classList.remove('hidden');
+                        bar.classList.add('grid');
+                    } else {
+                        bar.classList.add('hidden');
+                        bar.classList.remove('grid');
+                    }
+                }
+
+                const navBtn = document.getElementById(`navStep${i}`);
+                if (navBtn) {
+                    navBtn.disabled = i > maxUnlockedStep;
+                    if (i === step) {
+                        navBtn.className = 'step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-bold bg-amber-500 text-zinc-950 transition';
+                    } else if (i <= maxUnlockedStep) {
+                        navBtn.className = 'step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-zinc-800/80 text-zinc-200 hover:bg-zinc-800 transition';
+                    } else {
+                        navBtn.className = 'step-pill flex items-center justify-center gap-1.5 py-1.5 px-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-zinc-500 disabled:opacity-45 transition';
+                    }
+                }
+            }
+
+            if (step === 2 && rawUploadedImage) {
+                requestAnimationFrame(() => setupCropDisplayCanvas(false));
+            } else if (step === 3 && workingImage) {
+                requestAnimationFrame(() => schedulePreviewRender());
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // =============================================================
+        // 3. STEP 1: SOURCE MODE & IMAGE INGESTION
+        // =============================================================
+        function setSourceInputMode(mode) {
+            sourceInputMode = mode;
+            const negBtn = document.getElementById('modeSelectNegative');
+            const posBtn = document.getElementById('modeSelectPositive');
+
+            if (mode === 'negative') {
+                negBtn.className = 'flex items-center gap-3 p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/15 text-left transition active:scale-[0.99]';
+                negBtn.querySelector('div').className = 'w-10 h-10 rounded-xl bg-amber-500 text-zinc-950 flex items-center justify-center shrink-0';
+                posBtn.className = 'flex items-center gap-3 p-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 hover:border-zinc-700 text-left transition active:scale-[0.99]';
+                posBtn.querySelector('div').className = 'w-10 h-10 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0';
+                filmMaskType = 'orange';
+            } else {
+                posBtn.className = 'flex items-center gap-3 p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/15 text-left transition active:scale-[0.99]';
+                posBtn.querySelector('div').className = 'w-10 h-10 rounded-xl bg-amber-500 text-zinc-950 flex items-center justify-center shrink-0';
+                negBtn.className = 'flex items-center gap-3 p-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 hover:border-zinc-700 text-left transition active:scale-[0.99]';
+                negBtn.querySelector('div').className = 'w-10 h-10 rounded-xl bg-zinc-800 text-zinc-300 flex items-center justify-center shrink-0';
+                filmMaskType = 'none';
+            }
+            updateMaskPillsUI();
+        }
+
+        function handleFileUpload(file) {
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast("Rakitra sary (PNG, JPG, WEBP) ihany no azo ampidirina.", "error");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    rawUploadedImage = img;
+                    cropRotation = 0;
+                    step3Rotation = 0;
+                    cropPreviewInverted = (sourceInputMode === 'negative');
+
+                    const toggleBtn = document.getElementById('cropPreviewToggleBtn');
+                    const toggleTxt = document.getElementById('cropPreviewToggleText');
+                    if (sourceInputMode === 'negative') {
+                        toggleBtn.classList.remove('hidden');
+                        toggleTxt.textContent = "Jery Positif";
+                    } else {
+                        toggleBtn.classList.add('hidden');
+                    }
+
+                    document.getElementById('headerResetBtn').classList.remove('hidden');
+                    maxUnlockedStep = 2;
+                    buildCropSourceCanvas();
+                    goToStep(2);
+                };
+                img.onerror = function() {
+                    showToast("Tsy afaka namaky an'io sary io ny navigateur.", "error");
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        cameraInput.addEventListener('change', (e) => handleFileUpload(e.target.files[0]));
+        galleryInput.addEventListener('change', (e) => handleFileUpload(e.target.files[0]));
+
+        // =============================================================
+        // 4. STEP 2: INTERACTIVE TOUCH CROPPER (RECADRAGE)
+        // =============================================================
+        function buildCropSourceCanvas() {
+            if (!rawUploadedImage) return;
+            const rot = ((cropRotation % 360) + 360) % 360;
+            const swap = (rot === 90 || rot === 270);
+            const w = swap ? rawUploadedImage.naturalHeight : rawUploadedImage.naturalWidth;
+            const h = swap ? rawUploadedImage.naturalWidth : rawUploadedImage.naturalHeight;
+
+            cropSourceCanvas.width = w;
+            cropSourceCanvas.height = h;
+            const ctx = cropSourceCanvas.getContext('2d');
+            ctx.save();
+            ctx.translate(w / 2, h / 2);
+            ctx.rotate((rot * Math.PI) / 180);
+            ctx.drawImage(rawUploadedImage, -rawUploadedImage.naturalWidth / 2, -rawUploadedImage.naturalHeight / 2);
+            ctx.restore();
+
+            // If negative mode & user wants positive preview while cropping
+            if (sourceInputMode === 'negative' && cropPreviewInverted) {
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const d = imgData.data;
+                for (let i = 0; i < d.length; i += 4) {
+                    d[i] = 255 - d[i];
+                    d[i + 1] = Math.min(255, (255 - d[i + 1]) * 1.12);
+                    d[i + 2] = Math.min(255, (255 - d[i + 2]) * 1.28);
+                }
+                ctx.putImageData(imgData, 0, 0);
+            }
+        }
+
+        function setupCropDisplayCanvas(resetBox = true) {
+            if (!cropSourceCanvas.width || !cropSourceCanvas.height) return;
+            const wrapper = document.getElementById('cropCanvasWrapper');
+            const maxW = Math.max(260, wrapper.clientWidth - 12);
+            const maxH = window.innerWidth < 768 ? Math.round(window.innerHeight * 0.40) : Math.round(window.innerHeight * 0.58);
+
+            const scale = Math.min(maxW / cropSourceCanvas.width, maxH / cropSourceCanvas.height, 1);
+            const dispW = Math.round(cropSourceCanvas.width * scale);
+            const dispH = Math.round(cropSourceCanvas.height * scale);
+
+            const prevW = cropCanvas.width || dispW;
+            const prevH = cropCanvas.height || dispH;
+
+            cropCanvas.width = dispW;
+            cropCanvas.height = dispH;
+
+            if (resetBox || !cropBox.w || !cropBox.h) {
+                const padX = Math.round(dispW * 0.07);
+                const padY = Math.round(dispH * 0.07);
+                cropBox = {
+                    x: padX,
+                    y: padY,
+                    w: dispW - padX * 2,
+                    h: dispH - padY * 2
+                };
+                if (cropAspectRatio) {
+                    enforceAspectRatioOnBox();
+                }
+            } else {
+                const rx = dispW / prevW;
+                const ry = dispH / prevH;
+                cropBox.x *= rx;
+                cropBox.y *= ry;
+                cropBox.w *= rx;
+                cropBox.h *= ry;
+            }
+
+            renderCropCanvas();
+        }
+
+        function enforceAspectRatioOnBox() {
+            if (!cropAspectRatio) return;
+            const cx = cropBox.x + cropBox.w / 2;
+            const cy = cropBox.y + cropBox.h / 2;
+            let newW = cropBox.w;
+            let newH = newW / cropAspectRatio;
+
+            if (newH > cropCanvas.height * 0.92) {
+                newH = cropCanvas.height * 0.92;
+                newW = newH * cropAspectRatio;
+            }
+            if (newW > cropCanvas.width * 0.92) {
+                newW = cropCanvas.width * 0.92;
+                newH = newW / cropAspectRatio;
+            }
+
+            cropBox.w = Math.max(40, newW);
+            cropBox.h = Math.max(40, newH);
+            cropBox.x = Math.max(0, Math.min(cropCanvas.width - cropBox.w, cx - cropBox.w / 2));
+            cropBox.y = Math.max(0, Math.min(cropCanvas.height - cropBox.h, cy - cropBox.h / 2));
+        }
+
+        function renderCropCanvas() {
+            const cw = cropCanvas.width;
+            const ch = cropCanvas.height;
+            if (!cw || !ch) return;
+
+            cropCtx.clearRect(0, 0, cw, ch);
+            cropCtx.drawImage(cropSourceCanvas, 0, 0, cw, ch);
+
+            // Darken outside crop box
+            cropCtx.fillStyle = 'rgba(0, 0, 0, 0.62)';
+            cropCtx.fillRect(0, 0, cw, cropBox.y);
+            cropCtx.fillRect(0, cropBox.y + cropBox.h, cw, ch - (cropBox.y + cropBox.h));
+            cropCtx.fillRect(0, cropBox.y, cropBox.x, cropBox.h);
+            cropCtx.fillRect(cropBox.x + cropBox.w, cropBox.y, cw - (cropBox.x + cropBox.w), cropBox.h);
+
+            // Border
+            cropCtx.strokeStyle = '#f59e0b';
+            cropCtx.lineWidth = 2;
+            cropCtx.strokeRect(cropBox.x, cropBox.y, cropBox.w, cropBox.h);
+
+            // Rule of thirds grid
+            cropCtx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            cropCtx.lineWidth = 1;
+            cropCtx.beginPath();
+            cropCtx.moveTo(cropBox.x + cropBox.w / 3, cropBox.y);
+            cropCtx.lineTo(cropBox.x + cropBox.w / 3, cropBox.y + cropBox.h);
+            cropCtx.moveTo(cropBox.x + (2 * cropBox.w) / 3, cropBox.y);
+            cropCtx.lineTo(cropBox.x + (2 * cropBox.w) / 3, cropBox.y + cropBox.h);
+            cropCtx.moveTo(cropBox.x, cropBox.y + cropBox.h / 3);
+            cropCtx.lineTo(cropBox.x + cropBox.w, cropBox.y + cropBox.h / 3);
+            cropCtx.moveTo(cropBox.x, cropBox.y + (2 * cropBox.h) / 3);
+            cropCtx.lineTo(cropBox.x + cropBox.w, cropBox.y + (2 * cropBox.h) / 3);
+            cropCtx.stroke();
+
+            // Corner handles
+            const corners = [
+                [cropBox.x, cropBox.y],
+                [cropBox.x + cropBox.w, cropBox.y],
+                [cropBox.x, cropBox.y + cropBox.h],
+                [cropBox.x + cropBox.w, cropBox.y + cropBox.h]
+            ];
+            corners.forEach(([hx, hy]) => {
+                cropCtx.fillStyle = '#f59e0b';
+                cropCtx.beginPath();
+                cropCtx.arc(hx, hy, 8, 0, Math.PI * 2);
+                cropCtx.fill();
+                cropCtx.strokeStyle = '#09090b';
+                cropCtx.lineWidth = 2;
+                cropCtx.stroke();
+            });
+        }
+
+        function getCanvasPointerPos(e) {
+            const rect = cropCanvas.getBoundingClientRect();
+            const scaleX = cropCanvas.width / rect.width;
+            const scaleY = cropCanvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        cropCanvas.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            cropCanvas.setPointerCapture(e.pointerId);
+            const pt = getCanvasPointerPos(e);
+            const hitR = 26;
+
+            const corners = [
+                { id: 'nw', x: cropBox.x, y: cropBox.y },
+                { id: 'ne', x: cropBox.x + cropBox.w, y: cropBox.y },
+                { id: 'sw', x: cropBox.x, y: cropBox.y + cropBox.h },
+                { id: 'se', x: cropBox.x + cropBox.w, y: cropBox.y + cropBox.h }
+            ];
+
+            let found = null;
+            for (const c of corners) {
+                if (Math.hypot(pt.x - c.x, pt.y - c.y) <= hitR) {
+                    found = c.id;
+                    break;
+                }
+            }
+
+            if (!found && pt.x >= cropBox.x && pt.x <= cropBox.x + cropBox.w && pt.y >= cropBox.y && pt.y <= cropBox.y + cropBox.h) {
+                found = 'move';
+            }
+
+            if (found) {
+                activeDragMode = found;
+                dragStartPt = pt;
+                dragStartBox = { ...cropBox };
+            }
+        });
+
+        cropCanvas.addEventListener('pointermove', (e) => {
+            if (!activeDragMode) return;
+            e.preventDefault();
+            const pt = getCanvasPointerPos(e);
+            const dx = pt.x - dragStartPt.x;
+            const dy = pt.y - dragStartPt.y;
+            const minSize = 44;
+            const cw = cropCanvas.width;
+            const ch = cropCanvas.height;
+
+            if (activeDragMode === 'move') {
+                cropBox.x = Math.max(0, Math.min(cw - dragStartBox.w, dragStartBox.x + dx));
+                cropBox.y = Math.max(0, Math.min(ch - dragStartBox.h, dragStartBox.y + dy));
+            } else {
+                let left = dragStartBox.x;
+                let top = dragStartBox.y;
+                let right = dragStartBox.x + dragStartBox.w;
+                let bottom = dragStartBox.y + dragStartBox.h;
+
+                if (activeDragMode.includes('w')) left = Math.max(0, Math.min(right - minSize, left + dx));
+                if (activeDragMode.includes('e')) right = Math.min(cw, Math.max(left + minSize, right + dx));
+                if (activeDragMode.includes('n')) top = Math.max(0, Math.min(bottom - minSize, top + dy));
+                if (activeDragMode.includes('s')) bottom = Math.min(ch, Math.max(top + minSize, bottom + dy));
+
+                let newW = right - left;
+                let newH = bottom - top;
+
+                if (cropAspectRatio) {
+                    newH = newW / cropAspectRatio;
+                    if (activeDragMode.includes('n')) {
+                        top = bottom - newH;
+                        if (top < 0) {
+                            top = 0;
+                            newH = bottom;
+                            newW = newH * cropAspectRatio;
+                        }
+                    } else {
+                        if (top + newH > ch) {
+                            newH = ch - top;
+                            newW = newH * cropAspectRatio;
+                        }
+                    }
+                    if (activeDragMode.includes('w')) {
+                        left = right - newW;
+                        if (left < 0) {
+                            left = 0;
+                            newW = right;
+                            newH = newW / cropAspectRatio;
+                        }
+                    } else {
+                        if (left + newW > cw) {
+                            newW = cw - left;
+                            newH = newW / cropAspectRatio;
+                        }
+                    }
+                }
+
+                cropBox = { x: left, y: top, w: Math.max(minSize, newW), h: Math.max(minSize, newH) };
+            }
+
+            renderCropCanvas();
+        });
+
+        cropCanvas.addEventListener('pointerup', () => {
+            activeDragMode = null;
+        });
+
+        function toggleCropPreviewMode() {
+            if (sourceInputMode !== 'negative') return;
+            cropPreviewInverted = !cropPreviewInverted;
+            const txt = document.getElementById('cropPreviewToggleText');
+            if (txt) txt.textContent = cropPreviewInverted ? "Jery Positif" : "Jery Négatif";
+            buildCropSourceCanvas();
+            renderCropCanvas();
+        }
+
+        function rotateCropSource(delta = 90) {
+            cropRotation = (cropRotation + delta + 360) % 360;
+            buildCropSourceCanvas();
+            setupCropDisplayCanvas(true);
+        }
+
+        function setCropAspect(ratio) {
+            cropAspectRatio = ratio;
+            document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+                const r = btn.getAttribute('data-ratio');
+                const active = (ratio === null && r === 'free') || (ratio !== null && parseFloat(r) === ratio);
+                btn.className = active
+                    ? 'crop-ratio-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-500 text-zinc-950 transition'
+                    : 'crop-ratio-btn shrink-0 px-3.5 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition';
+            });
+            enforceAspectRatioOnBox();
+            renderCropCanvas();
+        }
+
+        function applyCrop() {
+            if (!rawUploadedImage) return;
+
+            // Build un-inverted rotated full-resolution source canvas
+            const rot = ((cropRotation % 360) + 360) % 360;
+            const swap = (rot === 90 || rot === 270);
+            const fullW = swap ? rawUploadedImage.naturalHeight : rawUploadedImage.naturalWidth;
+            const fullH = swap ? rawUploadedImage.naturalWidth : rawUploadedImage.naturalHeight;
+
+            const fullRotCanvas = document.createElement('canvas');
+            fullRotCanvas.width = fullW;
+            fullRotCanvas.height = fullH;
+            const fCtx = fullRotCanvas.getContext('2d');
+            fCtx.save();
+            fCtx.translate(fullW / 2, fullH / 2);
+            fCtx.rotate((rot * Math.PI) / 180);
+            fCtx.drawImage(rawUploadedImage, -rawUploadedImage.naturalWidth / 2, -rawUploadedImage.naturalHeight / 2);
+            fCtx.restore();
+
+            // Map display cropBox to full-resolution pixels
+            const scaleX = fullW / cropCanvas.width;
+            const scaleY = fullH / cropCanvas.height;
+            const sx = Math.max(0, Math.round(cropBox.x * scaleX));
+            const sy = Math.max(0, Math.round(cropBox.y * scaleY));
+            const sw = Math.max(16, Math.min(fullW - sx, Math.round(cropBox.w * scaleX)));
+            const sh = Math.max(16, Math.min(fullH - sy, Math.round(cropBox.h * scaleY)));
+
+            const croppedCanvas = document.createElement('canvas');
+            croppedCanvas.width = sw;
+            croppedCanvas.height = sh;
+            const cCtx = croppedCanvas.getContext('2d');
+            cCtx.drawImage(fullRotCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+
+            workingImage = croppedCanvas;
+            step3Rotation = 0;
+            maxUnlockedStep = Math.max(maxUnlockedStep, 3);
+            goToStep(3);
+        }
+
+        // =============================================================
+        // 5. STEP 3: LABO LOKO & DETAILS 4K IMAGE ENGINE
+        // =============================================================
+        const sliderIds = [
+            'sliderExposure',
+            'sliderContrast',
+            'sliderSaturation',
+            'sliderTemperature',
+            'sliderSharpness',
+            'sliderDetails',
+            'sliderDenoise'
+        ];
+
+        sliderIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    updateSliderBadges();
+                    schedulePreviewRender();
+                });
+            }
+        });
+
+        function updateSliderBadges() {
+            document.getElementById('valExposure').textContent = document.getElementById('sliderExposure').value;
+            document.getElementById('valContrast').textContent = document.getElementById('sliderContrast').value;
+            document.getElementById('valSaturation').textContent = document.getElementById('sliderSaturation').value;
+            document.getElementById('valTemperature').textContent = document.getElementById('sliderTemperature').value;
+            document.getElementById('valSharpness').textContent = document.getElementById('sliderSharpness').value + '%';
+            document.getElementById('valDetails').textContent = document.getElementById('sliderDetails').value + '%';
+            document.getElementById('valDenoise').textContent = document.getElementById('sliderDenoise').value + '%';
+        }
+
+        function toggleAutoBalance() {
+            autoBalanceEnabled = !autoBalanceEnabled;
+            const btn = document.getElementById('autoBalanceBtn');
+            const txt = document.getElementById('autoBalanceText');
+            if (autoBalanceEnabled) {
+                btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs font-bold bg-amber-500 text-zinc-950 shadow transition flex items-center justify-center gap-1.5 active:scale-[0.98]';
+                txt.textContent = 'Auto-Balance Loko: ON';
+            } else {
+                btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition flex items-center justify-center gap-1.5 active:scale-[0.98]';
+                txt.textContent = 'Auto-Balance Loko: OFF';
+            }
+            schedulePreviewRender();
+        }
+
+        function setFilmMask(mask) {
+            filmMaskType = mask;
+            updateMaskPillsUI();
+            schedulePreviewRender();
+        }
+
+        function updateMaskPillsUI() {
+            document.querySelectorAll('.mask-pill').forEach(btn => {
+                const m = btn.getAttribute('data-mask');
+                const active = (m === filmMaskType);
+                btn.className = active
+                    ? 'mask-pill shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500 transition flex items-center gap-1.5'
+                    : 'mask-pill shrink-0 px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 transition flex items-center gap-1.5';
+            });
+        }
+
+        function resetLaboSliders() {
+            document.getElementById('sliderExposure').value = 0;
+            document.getElementById('sliderContrast').value = 10;
+            document.getElementById('sliderSaturation').value = 15;
+            document.getElementById('sliderTemperature').value = 0;
+            document.getElementById('sliderSharpness').value = 60;
+            document.getElementById('sliderDetails').value = 40;
+            document.getElementById('sliderDenoise').value = 25;
+            autoBalanceEnabled = true;
+            document.getElementById('autoBalanceBtn').className = 'flex-1 py-2.5 px-3 rounded-xl text-xs font-bold bg-amber-500 text-zinc-950 shadow transition flex items-center justify-center gap-1.5 active:scale-[0.98]';
+            document.getElementById('autoBalanceText').textContent = 'Auto-Balance Loko: ON';
+            updateSliderBadges();
+            schedulePreviewRender();
+        }
+
+        function rotateStep3Image() {
+            step3Rotation = (step3Rotation + 90) % 360;
+            schedulePreviewRender();
+        }
+
+        function showOriginalHold(hold) {
+            isHoldingOriginal = hold;
+            const badge = document.getElementById('livePreviewBadge');
+            if (badge) {
+                badge.textContent = hold ? "Sary Taloha (Tsy mbola voahitsy)" : "Sary Positif Voahitsy";
+            }
+            schedulePreviewRender();
+        }
+
+        function schedulePreviewRender() {
+            if (previewRafPending) return;
+            previewRafPending = true;
+            requestAnimationFrame(() => {
+                previewRafPending = false;
+                renderStep3Preview();
+            });
+        }
+
+        function getRotatedWorkingCanvas(targetMaxDim = null) {
+            if (!workingImage) return null;
+            const rot = ((step3Rotation % 360) + 360) % 360;
+            const swap = (rot === 90 || rot === 270);
+            const srcW = swap ? workingImage.height : workingImage.width;
+            const srcH = swap ? workingImage.width : workingImage.height;
+
+            let outW = srcW;
+            let outH = srcH;
+            if (targetMaxDim && Math.max(srcW, srcH) > targetMaxDim) {
+                const ratio = targetMaxDim / Math.max(srcW, srcH);
+                outW = Math.round(srcW * ratio);
+                outH = Math.round(srcH * ratio);
+            }
+
+            const c = document.createElement('canvas');
+            c.width = outW;
+            c.height = outH;
+            const ctx = c.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.save();
+            ctx.translate(outW / 2, outH / 2);
+            ctx.rotate((rot * Math.PI) / 180);
+            if (swap) {
+                ctx.drawImage(workingImage, -outH / 2, -outW / 2, outH, outW);
+            } else {
+                ctx.drawImage(workingImage, -outW / 2, -outH / 2, outW, outH);
+            }
+            ctx.restore();
+            return c;
+        }
+
+        function processDarkroomPipeline(canvas, skipEnhancement = false) {
+            const w = canvas.width;
+            const h = canvas.height;
+            const ctx = canvas.getContext('2d');
+            const imgData = ctx.getImageData(0, 0, w, h);
+            const data = imgData.data;
+
+            if (skipEnhancement) return;
+
+            const exposure = parseFloat(document.getElementById('sliderExposure').value);
+            const contrastVal = parseFloat(document.getElementById('sliderContrast').value);
+            const satVal = parseFloat(document.getElementById('sliderSaturation').value);
+            const tempVal = parseFloat(document.getElementById('sliderTemperature').value);
+            const sharpAmt = parseFloat(document.getElementById('sliderSharpness').value) / 100;
+            const detailAmt = parseFloat(document.getElementById('sliderDetails').value) / 100;
+            const denoiseAmt = parseFloat(document.getElementById('sliderDenoise').value) / 100;
+
+            // Step A: Inversion de couleur & Mask removal (if negative mode)
+            const isNeg = (sourceInputMode === 'negative');
+            for (let i = 0; i < data.length; i += 4) {
+                let r = data[i];
+                let g = data[i + 1];
+                let b = data[i + 2];
+
+                if (isNeg) {
+                    r = 255 - r;
+                    g = 255 - g;
+                    b = 255 - b;
+
+                    if (filmMaskType === 'orange') {
+                        // Compensate standard C-41 orange film base mask
+                        g = Math.min(255, g * 1.14);
+                        b = Math.min(255, b * 1.34);
+                    } else if (filmMaskType === 'blue') {
+                        r = Math.min(255, r * 1.24);
+                        g = Math.min(255, g * 1.08);
+                    }
+                }
+
+                data[i] = r;
+                data[i + 1] = g;
+                data[i + 2] = b;
+            }
+
+            // Step B: Percentile Auto-Levels / Color Balance (2nd to 98th percentile per channel)
+            let minR = 0, maxR = 255, minG = 0, maxG = 255, minB = 0, maxB = 255;
+            if (autoBalanceEnabled) {
+                const histR = new Uint32Array(256);
+                const histG = new Uint32Array(256);
+                const histB = new Uint32Array(256);
+                const totalPixels = w * h;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    histR[data[i]]++;
+                    histG[data[i + 1]]++;
+                    histB[data[i + 2]]++;
+                }
+
+                const findPercentile = (hist, pct) => {
+                    const target = totalPixels * pct;
+                    let sum = 0;
+                    for (let v = 0; v < 256; v++) {
+                        sum += hist[v];
+                        if (sum >= target) return v;
+                    }
+                    return 255;
+                };
+
+                minR = findPercentile(histR, 0.015);
+                maxR = Math.max(minR + 16, findPercentile(histR, 0.985));
+                minG = findPercentile(histG, 0.015);
+                maxG = Math.max(minG + 16, findPercentile(histG, 0.985));
+                minB = findPercentile(histB, 0.015);
+                maxB = Math.max(minB + 16, findPercentile(histB, 0.985));
+            }
+
+            // Step C: Exposure, Contrast, Temperature, Saturation, B&W
+            const contrastFactor = (259 * (contrastVal + 255)) / (255 * (259 - contrastVal));
+            const satFactor = 1 + satVal / 100;
+            const expOffset = exposure * 1.35;
+            const tempShift = tempVal * 0.65;
+
+            for (let i = 0; i < data.length; i += 4) {
+                let r = data[i];
+                let g = data[i + 1];
+                let b = data[i + 2];
+
+                if (autoBalanceEnabled) {
+                    r = ((r - minR) * 255) / (maxR - minR);
+                    g = ((g - minG) * 255) / (maxG - minG);
+                    b = ((b - minB) * 255) / (maxB - minB);
+                }
+
+                // Exposure + Temperature
+                r = r + expOffset + tempShift;
+                g = g + expOffset;
+                b = b + expOffset - tempShift;
+
+                // Contrast
+                r = contrastFactor * (r - 128) + 128;
+                g = contrastFactor * (g - 128) + 128;
+                b = contrastFactor * (b - 128) + 128;
+
+                // Saturation or Noir & Blanc
+                if (filmMaskType === 'bw') {
+                    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+                    r = g = b = lum;
+                } else {
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    r = gray + (r - gray) * satFactor;
+                    g = gray + (g - gray) * satFactor;
+                    b = gray + (b - gray) * satFactor;
+                }
+
+                data[i] = Math.max(0, Math.min(255, r));
+                data[i + 1] = Math.max(0, Math.min(255, g));
+                data[i + 2] = Math.max(0, Math.min(255, b));
+            }
+
+            // Step D: Spatial Anti-Grain (Edge-aware light blur) + Unsharp Mask & Micro-Details
+            if (denoiseAmt > 0.02 || sharpAmt > 0.02 || detailAmt > 0.02) {
+                const srcCopy = new Uint8ClampedArray(data);
+                const strength = sharpAmt * 1.15 + detailAmt * 0.65;
+
+                for (let y = 1; y < h - 1; y++) {
+                    const rowOffset = y * w * 4;
+                    for (let x = 1; x < w - 1; x++) {
+                        const idx = rowOffset + x * 4;
+                        const top = idx - w * 4;
+                        const bot = idx + w * 4;
+                        const left = idx - 4;
+                        const right = idx + 4;
+
+                        for (let c = 0; c < 3; c++) {
+                            const center = srcCopy[idx + c];
+                            const avg4 = (srcCopy[top + c] + srcCopy[bot + c] + srcCopy[left + c] + srcCopy[right + c]) * 0.25;
+                            const diff = center - avg4;
+
+                            let val = center;
+                            // Smooth tiny film grain if diff is small
+                            if (denoiseAmt > 0 && Math.abs(diff) < 18) {
+                                val = center - diff * (denoiseAmt * 0.75);
+                            }
+                            // Sharpen edges & micro-details
+                            if (strength > 0) {
+                                val = val + diff * strength;
+                            }
+                            data[idx + c] = Math.max(0, Math.min(255, val));
+                        }
+                    }
+                }
+            }
+
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function renderStep3Preview() {
+            if (!workingImage) return;
+            const c = getRotatedWorkingCanvas(960);
+            if (!c) return;
+
+            processDarkroomPipeline(c, isHoldingOriginal);
+
+            previewCanvas.width = c.width;
+            previewCanvas.height = c.height;
+            previewCtx.drawImage(c, 0, 0);
+
+            // Calculate final 4K target dimensions for display
+            const rot = ((step3Rotation % 360) + 360) % 360;
+            const swap = (rot === 90 || rot === 270);
+            const rawW = swap ? workingImage.height : workingImage.width;
+            const rawH = swap ? workingImage.width : workingImage.height;
+            const scale4K = 3840 / Math.max(rawW, rawH);
+            const targetW = Math.round(rawW * scale4K);
+            const targetH = Math.round(rawH * scale4K);
+
+            const dimEl = document.getElementById('liveDimText');
+            if (dimEl) dimEl.textContent = `${targetW}\u00d7${targetH} (4K)`;
+        }
+
+        // =============================================================
+        // 6. STEP 4: 4K UPSCALE GENERATION & BEFORE/AFTER COMPARISON
+        // =============================================================
+        function buildFinal4KResult() {
+            if (!workingImage) return;
+            const overlay = document.getElementById('processingOverlay');
+            overlay.classList.remove('hidden');
+
+            setTimeout(() => {
+                try {
+                    const rot = ((step3Rotation % 360) + 360) % 360;
+                    const swap = (rot === 90 || rot === 270);
+                    const rawW = swap ? workingImage.height : workingImage.width;
+                    const rawH = swap ? workingImage.width : workingImage.height;
+
+                    // Upscale to true 4K long edge (3840px)
+                    const scale4K = 3840 / Math.max(rawW, rawH);
+                    const outW = Math.round(rawW * scale4K);
+                    const outH = Math.round(rawH * scale4K);
+
+                    // 1. Create Before preview (scaled to 1600px max for fast comparison rendering)
+                    const beforeCanvas = getRotatedWorkingCanvas(1600);
+                    const beforeDataUrl = beforeCanvas.toDataURL('image/jpeg', 0.88);
+
+                    // 2. Create Full 4K Output Canvas
+                    const outCanvas = document.createElement('canvas');
+                    outCanvas.width = outW;
+                    outCanvas.height = outH;
+                    const oCtx = outCanvas.getContext('2d');
+                    oCtx.imageSmoothingEnabled = true;
+                    oCtx.imageSmoothingQuality = 'high';
+                    oCtx.save();
+                    oCtx.translate(outW / 2, outH / 2);
+                    oCtx.rotate((rot * Math.PI) / 180);
+                    if (swap) {
+                        oCtx.drawImage(workingImage, -outH / 2, -outW / 2, outH, outW);
+                    } else {
+                        oCtx.drawImage(workingImage, -outW / 2, -outH / 2, outW, outH);
+                    }
+                    oCtx.restore();
+
+                    processDarkroomPipeline(outCanvas, false);
+
+                    finalWidth = outW;
+                    finalHeight = outH;
+                    finalJpgDataUrl = outCanvas.toDataURL('image/jpeg', 0.96);
+                    finalPngDataUrl = outCanvas.toDataURL('image/png');
+
+                    document.getElementById('finalResBadge').textContent = `${outW} \u00d7 ${outH} px - Qualité 4K`;
+
+                    const finalAfterImg = document.getElementById('finalAfterImg');
+                    const finalBeforeImg = document.getElementById('finalBeforeImg');
+                    finalAfterImg.src = finalJpgDataUrl;
+                    finalBeforeImg.src = beforeDataUrl;
+
+                    finalAfterImg.onload = () => {
+                        syncBeforeImageSize();
+                        updateSliderPosition(50);
+                    };
+
+                    maxUnlockedStep = 4;
+                    overlay.classList.add('hidden');
+                    goToStep(4);
+                    showToast(`Vita ny sary 4K (${outW}\u00d7${outH} px)! Vonona ho amin'ny tirage na Gemini AI.`, "success");
+                } catch (err) {
+                    overlay.classList.add('hidden');
+                    showToast("Nisy olana kely teo am-panamboarana ny 4K: " + err.message, "error");
+                }
+            }, 60);
+        }
+
+        // Before/After Slider Interaction
+        const compareContainer = document.getElementById('compareContainer');
+        let isDraggingSlider = false;
+
+        function syncBeforeImageSize() {
+            const afterImg = document.getElementById('finalAfterImg');
+            const beforeImg = document.getElementById('finalBeforeImg');
+            if (afterImg && beforeImg && afterImg.clientWidth > 0) {
+                beforeImg.style.width = afterImg.clientWidth + 'px';
+                beforeImg.style.height = afterImg.clientHeight + 'px';
+            }
+        }
+
+        function updateSliderPosition(percent) {
+            const clamped = Math.max(0, Math.min(100, percent));
+            const clip = document.getElementById('beforeClipWrapper');
+            const divider = document.getElementById('sliderDivider');
+            if (clip) clip.style.width = clamped + '%';
+            if (divider) divider.style.left = clamped + '%';
+        }
+
+        function handleComparePointer(e) {
+            const rect = compareContainer.getBoundingClientRect();
+            const pct = ((e.clientX - rect.left) / rect.width) * 100;
+            updateSliderPosition(pct);
+        }
+
+        compareContainer.addEventListener('pointerdown', (e) => {
+            isDraggingSlider = true;
+            compareContainer.setPointerCapture(e.pointerId);
+            handleComparePointer(e);
+        });
+
+        compareContainer.addEventListener('pointermove', (e) => {
+            if (!isDraggingSlider) return;
+            handleComparePointer(e);
+        });
+
+        compareContainer.addEventListener('pointerup', () => {
+            isDraggingSlider = false;
+        });
+
+        window.addEventListener('resize', () => {
+            if (currentStep === 2 && rawUploadedImage) {
+                setupCropDisplayCanvas(false);
+            } else if (currentStep === 4) {
+                syncBeforeImageSize();
+            }
+        });
+
+        // =============================================================
+        // 7. DOWNLOAD PNG & JPG 4K, GEMINI AI BRIDGE & RESET APP
+        // =============================================================
+        function copyTextToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text).catch(() => fallbackCopyText(text));
+            }
+            return Promise.resolve(fallbackCopyText(text));
+        }
+
+        function fallbackCopyText(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand('copy');
+            } catch (e) {
+                // Ignore copy restriction
+            }
+            document.body.removeChild(ta);
+        }
+
+        function manualCopyPrompt() {
+            const promptEl = document.getElementById('geminiPromptInput');
+            const text = promptEl ? promptEl.value.trim() : '';
+            if (!text) return;
+            copyTextToClipboard(text).then(() => {
+                showToast("Voadika (Copié) ny baiko Gemini AI!", "success");
+            });
+        }
+
+        function closeGeminiModal() {
+            const modal = document.getElementById('geminiModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function launchGeminiAIBridge() {
+            if (!finalJpgDataUrl) {
+                showToast("Amboary aloha ny sary 4K vao mandefa any amin'ny Gemini AI.", "error");
+                return;
+            }
+
+            const promptEl = document.getElementById('geminiPromptInput');
+            const promptText = (promptEl && promptEl.value.trim())
+                ? promptEl.value.trim()
+                : "Améliorer cette image, ultra-réaliste, résolution 4k, hyper détaillé, netteté parfaite, éclairage professionnel, couleurs corrigées, qualité photo.";
+
+            // 1. Copy prompt to clipboard
+            copyTextToClipboard(promptText);
+
+            // 2. Auto-save 4K positive JPG to phone's downloads/gallery
+            const link = document.createElement('a');
+            link.download = 'sary_positif_4k_gemini.jpg';
+            link.href = finalJpgDataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // 3. Show clear Malagasy confirmation & open gemini.google.com/app
+            showToast("Voatahiry ny sary 4K ary voadika ny baiko! Apetaho (Coller) fotsiny ao amin'ny Gemini ary ampidiro (+) ilay sary.", "success");
+            const modal = document.getElementById('geminiModal');
+            if (modal) modal.classList.remove('hidden');
+
+            setTimeout(() => {
+                window.open('https://gemini.google.com/app', '_blank', 'noopener,noreferrer');
+            }, 350);
+        }
+
+        function download4KImage(format = 'png') {
+            const url = format === 'jpg' ? finalJpgDataUrl : finalPngDataUrl;
+            if (!url) {
+                showToast("Amboary aloha ny sary 4K vao tehirizina.", "error");
+                return;
+            }
+            const ext = format === 'jpg' ? 'jpg' : 'png';
+            const link = document.createElement('a');
+            const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+            link.download = `Labo4K-Tirage-${finalWidth}x${finalHeight}-${stamp}.${ext}`;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast(`Voatahiry amin'ny ${ext.toUpperCase()} 4K (${finalWidth}\u00d7${finalHeight}) ny sary!`, "success");
+        }
+
+        function resetApp() {
+            rawUploadedImage = null;
+            workingImage = null;
+            finalPngDataUrl = null;
+            finalJpgDataUrl = null;
+            finalWidth = 0;
+            finalHeight = 0;
+            cropRotation = 0;
+            step3Rotation = 0;
+            cropBox = { x: 0, y: 0, w: 0, h: 0 };
+            cameraInput.value = '';
+            galleryInput.value = '';
+            resetLaboSliders();
+            maxUnlockedStep = 1;
+            document.getElementById('headerResetBtn').classList.add('hidden');
+            goToStep(1);
+        }
+
+        // Initialize UI defaults
+        updateSliderBadges();
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('sw.js').catch(function () {});
+            });
+        }
+    </script>
 </body>
 </html>
